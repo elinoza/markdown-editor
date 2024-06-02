@@ -15,6 +15,9 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+/* body {
+  overflow: hidden;
+} */
 
 @layer utilities {
   .text-balance {
