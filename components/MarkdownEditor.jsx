@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -6,6 +6,7 @@ import { FaFileExport, FaFileImport } from "react-icons/fa6";
 
 const MarkdownEditor = () => {
   const [value, setValue] = useState("");
+  const [exportUrl, setExportUrl] = useState("");
   const editorRef = useRef(null);
   const previewRef = useRef(null);
   const isSyncing = useRef(false);
@@ -29,19 +30,71 @@ const MarkdownEditor = () => {
     }, 50);
   };
 
-  const handleExport = () => {};
-  const handleImport = async () => {};
+  const handleExport = () => {
+    if (exportUrl) {
+      URL.revokeObjectURL(exportUrl);
+      setExportUrl(null);
+    }
+    const blob = new Blob([value], { type: "text/markdown" });
+    const url = window.URL.createObjectURL(blob);
+    setExportUrl(url);
+  };
+
+  const handleImport = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = (e) => {
+      setValue(e.target.result);
+    };
+  };
+
+  const handleSample = async () => {
+    try {
+      const response = await fetch("/sample.md");
+      if (response.ok) {
+        const data = await response.text();
+        setValue(data);
+      } else {
+        throw new Error(
+          `Failed to fetch: ${response.status} ${response.statusText}`
+        );
+      }
+    } catch (error) {
+      console.error("Error importing markdown file:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleSample();
+  }, []);
 
   return (
     <>
-      <header className="bg-black text-xl flex justify-start items-center text-white w-full h-9 ">
-        <span onClick={handleExport} className=" px-5 mr-5 flex items-center">
+      <header className="bg-black text-xl flex items-center text-white w-full h-9 ">
+        <span
+          onClick={handleExport}
+          className=" mx-2  flex items-center cursor-pointer relative"
+        >
           {" "}
-          <FaFileExport />
-        </span>
-        <span onClick={handleImport} className="px-5 mr-5 flex items-center">
-          {" "}
+          <input
+            onChange={(e) => handleImport(e)}
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept=".md"
+            className="opacity-0 w-full absolute cursor-pointer"
+          />
           <FaFileImport />
+        </span>
+        <span
+          onClick={handleExport}
+          className="mx-2 flex items-center cursor-pointer"
+        >
+          <a href={exportUrl} download={"/document.md"}>
+            {" "}
+            <FaFileExport />
+          </a>
         </span>
       </header>
       <div className="flex h-[895px]  ">
