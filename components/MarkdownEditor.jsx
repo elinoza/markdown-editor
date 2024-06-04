@@ -1,15 +1,33 @@
 import { useState, useRef, useEffect } from "react";
 
+import Header from "./Header";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FaFileExport, FaFileImport } from "react-icons/fa6";
 
 const MarkdownEditor = () => {
   const [value, setValue] = useState("");
   const [exportUrl, setExportUrl] = useState("");
+  const [lastSelection, setLastSelection] = useState(null);
+
   const editorRef = useRef(null);
   const previewRef = useRef(null);
   const isSyncing = useRef(false);
+
+  const textAreaSelection = (syntax) => {
+    const txtarea = editorRef.current;
+    const start = txtarea.selectionStart;
+    const finish = txtarea.selectionEnd;
+    const selection = txtarea.value.substring(start, finish);
+    const newValue =
+      txtarea.value.substring(0, start) +
+      syntax.syntax +
+      (finish - start === 0 ? syntax.sample : selection) +
+      (syntax.double ? syntax.syntax : "") +
+      txtarea.value.substring(finish);
+    setValue(newValue);
+    console.log(txtarea.selectionEnd, lastSelection);
+    txtarea.focus();
+  };
 
   const handleScroll = (currentElement) => {
     if (isSyncing.current) return;
@@ -43,10 +61,12 @@ const MarkdownEditor = () => {
   const handleImport = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    reader.readAsText(file, "UTF-8");
     reader.onload = (e) => {
       setValue(e.target.result);
     };
+    if (file) {
+      reader.readAsText(file);
+    }
   };
 
   const handleSample = async () => {
@@ -71,59 +91,37 @@ const MarkdownEditor = () => {
 
   return (
     <>
-      <header className="bg-black text-xl flex items-center text-white w-full h-9 ">
-        <span
-          onClick={handleExport}
-          className=" mx-2  flex items-center cursor-pointer relative"
-        >
-          {" "}
-          <input
-            onChange={(e) => handleImport(e)}
-            type="file"
-            id="avatar"
-            name="avatar"
-            accept=".md"
-            className="opacity-0 w-full absolute cursor-pointer"
-          />
-          <FaFileImport />
-        </span>
-        <span
-          onClick={handleExport}
-          className="mx-2 flex items-center cursor-pointer"
-        >
-          <a href={exportUrl} download={"/document.md"}>
-            {" "}
-            <FaFileExport />
-          </a>
-        </span>
-      </header>
-      <div className="flex h-[895px]  ">
-        <div className="flex-1 overflow-auto">
+      <Header
+        onChange={handleImport}
+        onClick={handleExport}
+        changeSyntax={(syntax) => textAreaSelection(syntax)}
+        exportUrl={exportUrl}
+      />
+      <div className="flex mt-[36px] h-[895px]   ">
+        <section className="flex-1 overflow-auto">
           <textarea
             ref={editorRef}
             onScroll={() => handleScroll(editorRef.current)}
             className="w-full h-full resize-none pt-5 px-5 focus:outline-none "
-            placeholder="Feed me some Markdown 🍕"
+            placeholder="Markdown here"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
             autoFocus
           />
-        </div>
-
-        <div
+        </section>
+        <section
           ref={previewRef}
           onScroll={() => handleScroll(previewRef.current)}
-          className="flex-1 overflow-auto  bg-stone-200 pt-5 px-5 "
+          className="hidden md:flex flex-1   overflow-auto  bg-[#F3E8DB] pt-5 px-5 "
         >
           <article>
-            <Markdown
-              remarkPlugins={[remarkGfm]}
-              className="prose text-5xl min-w-full"
-            >
+            <Markdown remarkPlugins={[remarkGfm]} className="prose  min-w-full">
               {value}
             </Markdown>
           </article>
-        </div>
+        </section>
       </div>
     </>
   );
