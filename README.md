@@ -2,12 +2,6 @@
 
 This project is a Markdown editor built with Next.js. It utilizes the following libraries:
 
-- `react-icons`
-- `react-markdown`
-- `remark-gfm`
-- `clsx`
-- `tailwindcss`
-- `@tailwindcss/typography`
 <img width="1434" alt="Ekran Resmi 2024-06-05 01 17 03" src="https://github.com/elinoza/markdown-editor/assets/72200043/8c4a0124-8af0-4805-941a-567b89600b21">
 
 ## Libraries Used
