@@ -25,7 +25,6 @@ const MarkdownEditor = () => {
       (syntax.double ? syntax.syntax : "") +
       txtarea.value.substring(finish);
     setValue(newValue);
-    console.log(txtarea.selectionEnd, lastSelection);
     txtarea.focus();
   };
 

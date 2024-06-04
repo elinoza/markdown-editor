@@ -47,7 +47,3 @@ This project provides a simple and intuitive interface for editing Markdown with
 ## Contributing
 
 If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome.
-
-## License
-
-This project is [MIT licensed](LICENSE).
