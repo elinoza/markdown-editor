@@ -102,7 +102,7 @@ const MarkdownEditor = () => {
           <textarea
             ref={editorRef}
             onScroll={() => handleScroll(editorRef.current)}
-            className="w-full h-full resize-none pt-5 px-5 focus:outline-none "
+            className="w-full h-full resize-none pt-5 px-5 pb-5 focus:outline-none "
             placeholder="Markdown here"
             value={value}
             onChange={(e) => {
@@ -114,7 +114,7 @@ const MarkdownEditor = () => {
         <section
           ref={previewRef}
           onScroll={() => handleScroll(previewRef.current)}
-          className="hidden md:flex flex-1   overflow-auto  bg-[#F3E8DB] pt-5 px-5 "
+          className="hidden md:flex flex-1   overflow-auto  bg-[#F3E8DB] pt-5 pb-5 px-5 "
         >
           <article>
             <Markdown remarkPlugins={[remarkGfm]} className="prose  min-w-full">

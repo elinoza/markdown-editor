@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 import { FaFileExport, FaFileImport } from "react-icons/fa6";
+import { IoLogoGithub } from "react-icons/io";
 import clsx from "clsx";
 
 const Header = ({ onChange, onClick, exportUrl, changeSyntax }) => {
@@ -68,7 +69,7 @@ const Header = ({ onChange, onClick, exportUrl, changeSyntax }) => {
             className="opacity-0 w-full absolute !cursor-pointer"
           />
           <FaFileImport />
-          <span className="absolute opacity-0 text-sm relativ text-black  bottom-[-50px] left-[-30px] group-hover:opacity-100">
+          <span className="absolute opacity-0 text-sm  text-black bg-stone-100 p-1 border rounded bottom-[-70px] left-[-40px] group-hover:opacity-80">
             Import md file.
           </span>
         </span>
@@ -80,9 +81,14 @@ const Header = ({ onChange, onClick, exportUrl, changeSyntax }) => {
             {" "}
             <FaFileExport />
           </a>
-          <span className="absolute opacity-0 text-sm text-black  bottom-[-50px] left-[-30px] group-hover:opacity-100">
+          <span className="absolute opacity-0 text-sm  text-black bg-stone-100 p-1 border rounded bottom-[-70px] left-[-40px] group-hover:opacity-80">
             Export as md.
           </span>
+        </span>
+        <span className=" text-xl">
+          <a href="https://github.com/elinoza/markdown-editor" target="_blank">
+            <IoLogoGithub />
+          </a>
         </span>
       </div>
     </header>
