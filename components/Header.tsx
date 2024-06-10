@@ -4,8 +4,30 @@ import { FaFileExport, FaFileImport } from "react-icons/fa6";
 import { IoLogoGithub } from "react-icons/io";
 import clsx from "clsx";
 
-const Header = ({ onChange, onClick, exportUrl, changeSyntax }) => {
-  const stylingButtons = [
+type HeaderProps = {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
+  exportUrl: string;
+  changeSyntax: (syntax: Syntax) => void;
+};
+type Syntax = {
+  syntax: string;
+  double: boolean;
+  sample: string;
+};
+type StylingButton = {
+  name: string;
+  syntax: Syntax;
+  className: string;
+};
+
+const Header = ({
+  onChange,
+  onClick,
+  exportUrl,
+  changeSyntax,
+}: HeaderProps) => {
+  const stylingButtons: StylingButton[] = [
     {
       name: "B",
       syntax: { syntax: "**", double: true, sample: "Bold" },

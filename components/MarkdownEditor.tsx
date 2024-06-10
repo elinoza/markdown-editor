@@ -5,13 +5,11 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const MarkdownEditor = () => {
-  const [value, setValue] = useState("");
-  const [exportUrl, setExportUrl] = useState("");
-  const [lastSelection, setLastSelection] = useState(null);
-
-  const editorRef = useRef(null);
-  const previewRef = useRef(null);
-  const isSyncing = useRef(false);
+  const [value, setValue] = useState<string>("");
+  const [exportUrl, setExportUrl] = useState<string>("");
+  const editorRef = useRef<HTMLTextAreaElement | null>(null);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const isSyncing = useRef<boolean>(false);
 
   const textAreaSelection = (syntax) => {
     const txtarea = editorRef.current;
@@ -57,11 +55,12 @@ const MarkdownEditor = () => {
     setExportUrl(url);
   };
 
-  const handleImport = (e) => {
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
-      setValue(e.target.result);
+      const result = e.target.result as string;
+      setValue(result);
     };
     if (file) {
       reader.readAsText(file);
@@ -113,10 +112,10 @@ const MarkdownEditor = () => {
         <section
           ref={previewRef}
           onScroll={() => handleScroll(previewRef.current)}
-          className="hidden md:flex flex-1   overflow-auto  bg-[#F3E8DB] pt-5 pb-5 px-5 "
+          className=" md:flex flex-1  overflow-auto  bg-[#F3E8DB] pt-5 pb-5 px-5 "
         >
           <article>
-            <Markdown remarkPlugins={[remarkGfm]} className="prose  min-w-full">
+            <Markdown remarkPlugins={[remarkGfm]} className="prose min-w-full">
               {value}
             </Markdown>
           </article>
