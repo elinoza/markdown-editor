@@ -5,8 +5,8 @@ This project is a Markdown editor built with Next.js. It utilizes the following 
 <img width="1434" alt="Ekran Resmi 2024-06-05 01 17 03" src="https://github.com/elinoza/markdown-editor/assets/72200043/8c4a0124-8af0-4805-941a-567b89600b21">
 
 ## Libraries Used
-
 - **Next.js**: The React Framework for Production.
+- **TypeScript**This project built using TypeScript.
 - **react-icons**: Include popular icons in your React projects easily.
 - **react-markdown**: Render Markdown as React components.
 - **remark-gfm**: GitHub Flavored Markdown (GFM) support for `remark`.
