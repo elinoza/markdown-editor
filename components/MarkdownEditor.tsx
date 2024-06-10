@@ -4,45 +4,56 @@ import Header from "./Header";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+type Syntax = {
+  syntax: string;
+  double: boolean;
+  sample: string;
+};
+
 const MarkdownEditor = () => {
   const [value, setValue] = useState<string>("");
-  const [exportUrl, setExportUrl] = useState<string>("");
+  const [exportUrl, setExportUrl] = useState<string | null>("");
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const isSyncing = useRef<boolean>(false);
 
-  const textAreaSelection = (syntax) => {
+  const textAreaSelection = (syntax: Syntax) => {
     const txtarea = editorRef.current;
-    const start = txtarea.selectionStart;
-    const finish = txtarea.selectionEnd;
-    const selection = txtarea.value.substring(start, finish);
-    const newValue =
-      txtarea.value.substring(0, start) +
-      syntax.syntax +
-      (finish - start === 0 ? syntax.sample : selection) +
-      (syntax.double ? syntax.syntax : "") +
-      txtarea.value.substring(finish);
-    setValue(newValue);
-    txtarea.focus();
+    const start = txtarea?.selectionStart;
+    const finish = txtarea?.selectionEnd;
+    if (start && finish) {
+      const selection = txtarea?.value.substring(start, finish);
+      const newValue =
+        txtarea?.value.substring(0, start) +
+        syntax.syntax +
+        (finish - start === 0 ? syntax.sample : selection) +
+        (syntax.double ? syntax.syntax : "") +
+        txtarea?.value.substring(finish);
+      setValue(newValue);
+      txtarea?.focus();
+    }
   };
 
-  const handleScroll = (currentElement) => {
+  const handleScroll = (
+    currentElement: HTMLDivElement | HTMLTextAreaElement | null
+  ) => {
     if (isSyncing.current) return;
     isSyncing.current = true;
-
     const otherElement =
       currentElement === editorRef.current
         ? previewRef.current
         : editorRef.current;
-    const percentage =
-      currentElement.scrollTop /
-      (currentElement.scrollHeight - currentElement.clientHeight);
-    otherElement.scrollTop =
-      percentage * (otherElement.scrollHeight - otherElement.clientHeight);
+    if (currentElement && otherElement) {
+      const percentage =
+        currentElement.scrollTop /
+        (currentElement.scrollHeight - currentElement?.clientHeight);
+      otherElement.scrollTop =
+        percentage * (otherElement.scrollHeight - otherElement.clientHeight);
 
-    setTimeout(() => {
-      isSyncing.current = false;
-    }, 50);
+      setTimeout(() => {
+        isSyncing.current = false;
+      }, 50);
+    }
   };
 
   const handleExport = () => {
@@ -55,11 +66,14 @@ const MarkdownEditor = () => {
     setExportUrl(url);
   };
 
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+  const handleImport = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files?.[0];
+    if (!file) {
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
-      const result = e.target.result as string;
+      const result = e?.target?.result as string;
       setValue(result);
     };
     if (file) {

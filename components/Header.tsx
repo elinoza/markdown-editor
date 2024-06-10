@@ -7,7 +7,7 @@ import clsx from "clsx";
 type HeaderProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClick: () => void;
-  exportUrl: string;
+  exportUrl?: string | null;
   changeSyntax: (syntax: Syntax) => void;
 };
 type Syntax = {
@@ -99,7 +99,7 @@ const Header = ({
           onClick={onClick}
           className="mx-2 group relative flex items-center cursor-pointer"
         >
-          <a href={exportUrl} download={"/document.md"}>
+          <a href={exportUrl as string} download={"/document.md"}>
             {" "}
             <FaFileExport />
           </a>
